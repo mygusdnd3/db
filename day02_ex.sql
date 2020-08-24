@@ -55,29 +55,56 @@ FROM emp;
         사원이름, 급여를 조회하세요
         단, 단일행 함수를 이용해서 처리하세요
 */
+SELECT ename, sal 
+FROM 
+    emp
+WHERE
+    MOD(sal,2) = 0;
 
 /*
     7. 급여가 100으로 나눠 떨어지는 사원의 
         사원번호, 사원이름, 급여를 조회하세요.
         단, 단일행 함수를 이용해서 처리하세요
 */
+
+SELECT empno AS 사원번호, ename AS 사원이름 , sal AS 급여
+FROM emp 
+WHERE MOD(sal, 100)=0;
+
 ----------------------------------------------------------------
 
 --문자열 처리 함수--
 /*
     8. 사원의 이름이 5글자 이하인 사원의
     사원번호, 사원이름, 부서번호를 조회하세요
+    
 */
+SELECT empno
+     , ename
+     , deptno
+  FROM emp
+ WHERE LENGTH(ename)<5
+;
 
 /*
     9. 사원이름이 'N'으로 끝나는 사원의
         사원번호, 사원이름을 조회하세요
 */
+SELECT empno
+     , ename
+  FROM emp
+ WHERE ename LIKE '%N';
 
 /*
     10. 사원이름에 'A' 가 들어있는 사원의 
         사원번호, 사원이름, 사원급여를 조회하세요
 */
+SELECT 
+    empno, ename, sal
+FROM 
+    emp
+WHERE 
+    ENAME LIKE '%A%';
 
 /*
     11. 사원들의
@@ -89,14 +116,24 @@ FROM emp;
             SMITH
             ==>***TH
 */
+SELECT empno
+     , LPAD('',(LENGTH(ENAME)-2),'*')||SUBSTR(ename,-2)
+FROM EMP;
+
 
 /*
     12. 사원의 사원번호, 사원이름을 조회하세요.
         사원 이름은 첫글자와 마지막 글자는 표현하고
         나머지는 문자로 * 로 교체해서 조회하세요.
 */
+SELECT EMPNO
+      ,SUBSTR(ENAME,1)||RPAD('',(LENGTH(ENAME)-2,'*'))||SUBSTR(ENAME,-1)
+FROM EMP;
 
 /*
     13. 사원의 사원이름, 급여를 조회하세요
         급여는 첫자리만 표현하고 나머지는 #으로 대체해서 처리하세요
 */
+SELECT EMPNO
+     , SUBSTR(SAL,1)||RPAD('',(LENGTH(ENAME),'*'))
+FROM EMP;
