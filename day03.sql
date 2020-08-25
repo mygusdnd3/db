@@ -29,6 +29,7 @@ SELECT  RPAD(LPAD(SUBSTR(ENAME,3,1),3,'*'),LENGTH(ENAME),'*')
 FROM EMP
 ;
 SELECT RPAD(LPAD(SUBSTR(ENAME,3,1),3,'*'),LENGTH(ENAME),'*') FROM EMP;
+SELECT RPAD(LPAD(SUBSTR(ENAME,3,1),3,'*'),LENGTH(ENAME),'*') FROM EMP;
 
 SELECT EMPNO 
      , RPAD(  -- 전체 길이만큼 만들어주고 채운문자는 오른쪽에 *로 채워준다.
@@ -36,7 +37,12 @@ SELECT EMPNO
        SUBSTR(ENAME,3,1),3,'*') --세번째문자만꺼낸다 
      , LENGTH(ENAME),'*')  이름
   FROM EMP;
-
+SELECT EMPNO
+     , RPAD(
+       LPAD(
+       SUBSTR(ENAME,3,1),3,'*'),LENGTH(ENAME),'*')
+  FROM EMP
+;
 SELECT LPAD('*',2,'*')||SUBSTR(ENAME,3,1)||RPAD('*',LENGTH(ENAME)-2,'*') A , ENAME
   FROM EMP;
   
@@ -75,7 +81,7 @@ SELECT LPAD('*',2,'*')||SUBSTR(ENAME,3,1)||RPAD('*',LENGTH(ENAME)-2,'*') A , ENA
         1970년 1월 1일 0시 0분 0초에서
         지정한 날짜까지의 날짜연번을 이용해서 기억한다.
         
-        날짜 연벼이란
+        날짜 연번이란
         날수.시간 의 형태로 숫자로 표현된 것.
     
     참고 ] 
@@ -107,6 +113,10 @@ SELECT ENAME AS 사원이름 ,HIREDATE AS 입사일
           -- 이 경우 (FLOOR(SYSDATE - HIREDATE)는 숫자데이터이고 형변환함수(TO_CHAR())가 자동 호출되어서 작동된다
   FROM EMP
 ;
+SELECT ENAME AS 사원이름, HIREDATE AS 입사일
+     , CONCAT(FLOOR(SYSDATE - HIREDATE),' 일') AS 근무일수
+  FROM EMP
+;
 
 -- 문제 ] 개강일부터 오늘까지 날수를 조회하세요
 SELECT FLOOR(SYSDATE - TO_DATE('2020/07/16', 'YYYY/MM/DD')) 출석날짜 FROM DUAL;
@@ -116,6 +126,9 @@ SELECT
 FROM
     DUAL
 ;
+
+SELECT FLOOR(SYSDATE - TO_DATE('2020/07/16','YYYY/MM/DD')) FROM DUAL;
+SELECT TO_CHAR(SYSDATE+7, 'YYYY/MM/MM HH24:MI:SS') FROM DUAL;
 
 -----------------------------------------------------------------------------
 /*
@@ -136,7 +149,7 @@ SELECT
     ADD_MONTHS(SYSDATE,3)
 FROM 
     DUAL;
-    
+SELECT ADD_MONTHS(SYSDATE,3) FROM DUAL;
 -- 사원의 이름, 입사일에서 2개월 이전은 몇일인가
 
 SELECT ENAME AS 사원이름
@@ -144,6 +157,7 @@ SELECT ENAME AS 사원이름
      , ADD_MONTHS(HIREDATE,-2) 고용일2개월전
   FROM EMP
 ;
+SELECT ENAME AS 사원이름, HIREDATE AS 고용일, ADD_MONTHS(HIREDATE,-2) FROM EMP;
 /*
     2. MONTHS_BETWEEN
         ==> 두 날짜 사이의 간격을 월 단위로 알려주는 함수
@@ -155,6 +169,7 @@ SELECT ENAME AS 사원이름
 SELECT FLOOR(MONTHS_BETWEEN(SYSDATE, TO_DATE('1989/02/18','YYYY/MM/DD'))) 개월수
   FROM DUAL
 ;
+SELECT FLOOR(MONTHS_BETWEEN(SYSDATE,HIREDATE)) FROM EMP;
 
 --문제 ] 사원의 입사일은 몇개월 전인지 조회하세요
 SELECT ENAME, CONCAT(FLOOR(MONTHS_BETWEEN(SYSDATE, HIREDATE)),' 개월 재직중') AS 재직월수
@@ -173,7 +188,7 @@ SELECT LAST_DAY(TO_DATE('2020/02', 'YYYY/MM')) AS "2월 마지막 날" FROM DUAL;
 -- 사원의 이름, 급여, 첫 급여일을 조회하세요
 --급여일은 해당 월의 마지막 날로 한다.
 SELECT ENAME, SAL, LAST_DAY(HIREDATE) AS "첫 급여일" FROM EMP;
-
+SELECT ENAME, SAL, LAST_DAY(HIREDATE) AS "첫급여" FROM EMP;
 /*
     4. NEXT_DAY
         ==> 지정한 날 이후에 가장 처음 만나는 지정한 요일이 몇일인지를 알려주는 함수
@@ -193,12 +208,13 @@ SELECT ENAME, SAL, LAST_DAY(HIREDATE) AS "첫 급여일" FROM EMP;
 SELECT NEXT_DAY(TO_DATE('2020/09/01','YYYY/MM/DD'),'토') AS "다음주 토요일"
   FROM EMP
 ;
+SELECT NEXT_DAY(TO_DATE('2020/09/01','YYYY/MM/DD'),'금') AS "다음주 금요일" FROM EMP;
 SELECT SUBSTR(NEXT_DAY(SYSDATE,'토'),-2) AS "이번주 토요일"
   FROM DUAL;
-
+SELECT SUBSTR(NEXT_DAY(SYSDATE,'토'),-2) AS "이번주토요일" FROM DUAL;
 SELECT NEXT_DAY(NEXT_DAY(SYSDATE,'월'),'토') AS "다음주 토요일" FROM DUAL;
 -- 다가오는 월요일 계산(다음주가됨)그주의토요일..
-
+SELECT NEXT_DAY(NEXT_DAY(SYSDATE,'월'),'토')    FROM DUAL;
 /*
     ROUND
     ==> 날짜를 지정한 부분에서 반올림 하느 ㄴ함수
@@ -229,6 +245,10 @@ SELECT ROUND(SYSDATE,'YEAR') AS 년반올림
      , ROUND(SYSDATE,'DAY') AS 일반올림 --이번주 첫재날로 표기됨
   FROM DUAL
 ;
+
+SELECT ROUND(SYSDATE, 'YEAR') 
+     , ROUND(SYSDATE, 'DD')
+FROM DUAL;
 
 SELECT TO_CHAR(ROUND(SYSDATE,'MI'),'YYYY/MM/DD HH24:MI:SS') FROM DUAL;
 /*
@@ -261,6 +281,17 @@ CONCAT(
     ))
 FROM EMP
 ;
+
+SELECT
+    CONCAT(
+        CONCAT(CONCAT('사원이름 : ', LPAD(ENAME,8,' ')),', '),
+        CONCAT('사원급여 : ',
+            CONCAT(
+                LPAD(
+                    SUBSTR(
+                        TO_CHAR(SAL,'000,000'),
+                        INSTR(TO_CHAR(SAL, '000,000'),','),1),
+                        INS
 /*
     변환함수
     ==> 함수는 데이터 형태에 따라서 사용하는 함수가 달라진다.
@@ -323,7 +354,7 @@ FROM EMP
         형식 1]
             TO_DATE(날짜형식 문자)
         형식 2]
-            TO_DATE(날짜형식 문자, '형식)
+            TO_DATE(날짜형식 문자, '형식')
             ==> 문자데이터가 오라클이 지장하는 형식의 날짜처럼
                 되어있지 않은 경우 사용하는 방법
             예]
@@ -335,7 +366,7 @@ FROM EMP
 -- 당신이 태어난지 몇일 째 인지 조회하세요.
 SELECT FLOOR(SYSDATE - TO_DATE('1989/02/18'))FROM DUAL;
 
-SELECT FLOOR(TO_DATE(SYSDATE,'MM/DD/YY')-TO_DATE('02/18/89','mm/dd/yy')) FROM DUAL;
+SELECT FLOOR(SYSDATE -TO_DATE('02/18/1989','mm/dd/yyyy')) FROM DUAL;
 
 /*
     3. TO_NUMBER
@@ -401,7 +432,7 @@ FROM EMP
 ;
 
 SELECT
-    ENAME, COMM, NVL2(COMM, COMM+100, 0) AS 변경커미션
+    ENAME, COMM, NVL2(COMM, COMM+100,0) AS 변경커미션
 FROM
     EMP
 ;
@@ -413,7 +444,7 @@ FROM
 
 --CCOALESCE ] 커미션을 조회하는데 만약 커미션이 NULL이면 급열르 대신 출력하도록 하자
 SELECT
-    ENAME,SAL ,COMM,COALESCE(COMM, SAL,0) 봉급
+    ENAME,SAL ,COMM,COALESCE(COMM, SAL) 봉급
 FROM 
     EMP
 ;
