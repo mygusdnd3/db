@@ -87,4 +87,12 @@ SELECT ENAME, SAL, COMM,COALESCE(TO_CHAR(COMM),'NONE')
 
 FROM EMP
 ;
+
+SELECT 
+    ENAME AS 사원이름 , SAL 사원급여, COMM AS 커미션
+    ,DECODE(COMM,NULL,'NONE'
+                ,TO_CHAR(COMM)
+        )AS "커미션 여부"
+FROM EMP
+;
     
