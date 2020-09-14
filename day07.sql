@@ -1,3 +1,62 @@
+/*
+    수업 참여 실시 시간
+    
+        1. 9:30 ~ 12:30
+        
+        2. 13:30 ~ 16:30
+        
+        3. 16:30 ~ 18:30
+
+*/
+
+
+
+/*
+    DDL 명령
+    
+
+*/
+
+--1. 테이블 만들기
+/* 
+    형식 1 ] - 제약조건 없이 칼럼만 만드는 방법
+    
+        CREATE TABLE 테이블 이름(
+            필드이름    데이터타입(길이),
+            필드이름    데이터탙입(길이),
+            ...
+            );
+            
+    형식 2 ] -제약조건을 추가해서 만드는 방법
+        CREATE TABLE 테이블 이름(
+        필드이름    데이터타입(길이) [DEFAULT 데이터]
+            CONSTRAINT 제약조건이름 제약조건
+            CONSTRAINT 제약조건이름 제약조건,
+        필드이름    데이터타입(길이)
+            CONSTRAINT 제약조건이름 제약조건
+            CONSTRAINT 제약조건이름 제약조건,
+            ...
+        );
+*/
+--DEFAULT
+CREATE TABLE AVT
+AS
+    SELECT
+        *
+    FROM
+        AVATAR
+    WHERE
+     1=2 --언제나 거짓인조건
+;
+
+    SELECT
+        *
+    FROM
+        avatar
+    WHERE
+     1=2 --언제나 거짓인조건 결국 구조만 가져온다
+;
+
 CREATE TABLE avatar(
     ano NUMBER(2)
         CONSTRAINT AVT_NO_PK PRIMARY KEY,
@@ -309,7 +368,7 @@ VALUES(
 );
 
 SELECT NVL(MAX(EMPNO)+1,1000) FROM EMP;
-
+SELECT * FROM EMP;
 rollback;
 -- HELLO 계정 테스트
 INSERT INTO
@@ -491,7 +550,8 @@ WHERE
     제약조건 삭제하는 방법
         형식 ]
             ALTER TABLE 테이블이름
-            DROP CONSTRAINT 제약조건이름;
+           xx DROP CONSTRAINT 제약조건이름;
+           DROP UNIQUE(TEL);
         참고]
             기본키(PRIMARY KEY)의 경우 제약조건의 이름을 몰라도 삭제가능
             << 기본키는 한 테이블에 한개만 존재하기 때문에..
@@ -536,5 +596,5 @@ CREATE TABLE KCOLOR(
     CNAME VARCHAR(10 CHAR)
         CONSTRAINT KCLR_CNAME_NN NOT NULL,
     RCODE NUMBER(2)
-        CONSTRAINT KCLR_RCODE_FK FOREIGN KEY(RCODE) REFERENCES ABC(ANO)--(참조 키 추가)
-        );--형식2번
+        CONSTRAINT KCLR_RCODE_FK REFERENCES ABC(ANO)--(참조 키 추가)
+        );
