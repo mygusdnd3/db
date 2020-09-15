@@ -612,15 +612,15 @@ BEGIN
     FOR data IN (SELECT ename vname, job vjob,sal vsal FROM emp01 WHERE deptno = dno) LOOP
         DBMS_OUTPUT.PUT_LINE(CNT);
         cnt := cnt +1;
-      
+       DBMS_OUTPUT.PUT_LINE(CNT);
+        DBMS_OUTPUT.PUT_LINE('--------------------');
       /*
       result(cnt).vname := data.ename;
         result(cnt).vjob := data.job;
         result(cnt).vsal := data.sal;
         */
         result(cnt) := data;
-        DBMS_OUTPUT.PUT_LINE(CNT);
-        DBMS_OUTPUT.PUT_LINE('--------------------');
+       
         
     END LOOP;
     
@@ -777,7 +777,7 @@ exec proc09(7566);
 */
 
 CREATE OR REPLACE PROCEDURE PROC10(
-    ijob emp01.job%type
+    ijob IN emp01.job%type
 )
 IS
     TYPE T IS RECORD(
@@ -789,29 +789,39 @@ IS
     TYPE vtable IS TABLE OF T
     INDEX BY BINARY_INTEGER;
     vres vtable;
+    
     cnt BINARY_INTEGER :=0;
     
 BEGIN    
+    DBMS_OUTPUT.ENABLE;
+    DBMS_OUTPUT.PUT_LINE('111111111111111111111111111111');
     FOR data IN(SELECT 
                     ENAME,empno,e.DEPTNO,LOC 
                 FROM 
-                    EMP01 E , DEPT D
+                    EMP01 E 
                 WHERE 
                     job = ijob
                     AND E.DEPTNO = D.DEPTNO
                    
                 )LOOP
-             --vres(cnt) := data;
+                cnt := cnt+1;
                 DBMS_OUTPUT.PUT_LINE(cnt);
-                 cnt := cnt+1;
+            -- vres.vname := data.ename;
+            
+                 
                             
     END LOOP;
     FOR i IN 1..cnt LOOP
     DBMS_OUTPUT.PUT_LINE(VRES(i).vname);
-    DBMS_OUTPUT.PUT_LINE(VRES(i).enpno);
-    DBMS_OUTPUT.PUT_LINE(VRES(i).ijob);
+    DBMS_OUTPUT.PUT_LINE(VRES(i).vempno);
+        DBMS_OUTPUT.PUT_LINE('444444444444444444444444444444');
+    DBMS_OUTPUT.PUT_LINE(ijob);
+    
     DBMS_OUTPUT.PUT_LINE(VRES(i).vdeptno);
     DBMS_OUTPUT.PUT_LINE(VRES(i).vloc);
     END LOOP;
+        DBMS_OUTPUT.PUT_LINE('55555555555555555555555555553');
 END;
 /
+
+EXEC PROC10(7902);
