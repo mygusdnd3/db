@@ -51,3 +51,41 @@ EXEC TEST_T('SMITH');
         
         차
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+    부서이름, 사원수, 부서 평균급여, 부서최소 최대급여
+*/
+
+SELECT 
+    DNAME, MAX(SAL),ROUND(AVG(SAL),2),COUNT(*)
+FROM 
+    EMP01 E , DEPT D
+WHERE 
+    E.DEPTNO = D.DEPTNO
+GROUP BY
+    DNAME;
+
+      SELECT
+            empno
+      
+        FROM
+            emp01
+        WHERE
+            deptno = 10;
+
+
