@@ -1,0 +1,10 @@
+ALTER TABLE
+    member01
+ADD
+    pw VARCHAR2(10) DEFAULT '12345'
+        CONSTRAINT MEMB01_PW_NN NOT NULL;
+        
+ALTER TABLE
+    member01
+MODIFY
+    pw VARCHAR2(10) DEFAULT (null);
